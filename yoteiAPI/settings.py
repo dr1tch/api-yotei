@@ -51,7 +51,10 @@ INSTALLED_APPS = [
 
     # locals
     'wilayas.apps.WilayasConfig',
+    'users.apps.UsersConfig',
 ]
+
+AUTH_USER_MODEL = 'users.User'
 
 REST_FRAMEWORK = {    
     'DATETIME_FORMAT': "%m/%d/%Y %I:%M%P",
