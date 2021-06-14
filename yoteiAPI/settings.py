@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'corsheaders', # new
 
     # locals
+    'wilayas.apps.WilayasConfig',
 ]
 
 REST_FRAMEWORK = {    
