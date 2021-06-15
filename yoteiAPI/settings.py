@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount', # new
     'rest_auth.registration', # new
     'corsheaders', # new
+    'taggit', #new
+    'taggit_serializer', #new
 
     # locals
     'wilayas.apps.WilayasConfig',
