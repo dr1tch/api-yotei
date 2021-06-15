@@ -8,7 +8,6 @@ from .models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
-    auth_token = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -71,3 +70,10 @@ class PasswordChangeSerializer(serializers.Serializer):
     def validate_new_password(self, value):
         password_validation.validate_password(value)
         return value
+
+# class ReturnUserSerializer(serializers.Serializer):
+#     key = serializers.CharField()
+#     def get(self, data):
+#         user_id = Token.objects.get(key=data).user_id
+#         user = User.objects.get(id=user_id)
+#         return user

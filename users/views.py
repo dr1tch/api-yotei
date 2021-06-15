@@ -3,17 +3,37 @@ from rest_framework.serializers import Serializer
 from rest_framework.views import APIView
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
-from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth import logout
 from rest_framework import generics
 from .models import User
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
+from rest_framework.response import Response
+from django.http import JsonResponse
+from django.forms.models import model_to_dict
+import json
+
+
 
 from .serializers import (
     UserSerializer,
     RegisterSerializer,
     PasswordChangeSerializer,
 )
+
+import json
+from django.core.serializers.json import DjangoJSONEncoder
+from django.db.models.fields.files import ImageFieldFile
+
+
+class ExtendedEncoder(DjangoJSONEncoder):
+    def default(self, o):
+        if isinstance(o, ImageFieldFile):
+            return str(o)
+        else:
+            return super().default(o)
+
 
 class RegisterView(APIView):
     serializer_class = RegisterSerializer
@@ -48,7 +68,7 @@ class PasswordChangeView(APIView):
 
 class UserListView(APIView):
     serializer_class = UserSerializer
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request):
         queryset = User.objects.filter(is_superuser=False)
@@ -67,3 +87,40 @@ class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.filter(is_superuser=False)
     serializer_class = UserSerializer
 
+class GetUserByKey(generics.RetrieveAPIView):
+    def post(self, request, **kwargs):
+        print(request.data['key'])
+        # try:
+        user_id = Token.objects.get(key=request.data['key']).user_id
+        # wilaya = Wilaya.objects.get()
+        user = User.objects.get(id=user_id)
+        #     user.logo = json.dumps(str(user.logo)) 
+        #     result = JsonResponse(  model_to_dict(user) )
+        #     # result = json.dumps(user, cls=ExtendedEncoder)
+        response = {
+        'success': True,
+        'status_code': status.HTTP_200_OK,
+        'message': 'Successfully fetched users',
+        'users': {
+            'id': user.id,
+            'name': user.name,
+            'email': user.email,
+            'username': user.username,
+            'description': user.description,
+            'role': user.role,
+            'wilaya': {
+                'id': user.wilaya.id,
+                "name": user.wilaya.name,
+            },
+            'address': user.address,
+            'phone_number': user.phone_number,
+            # 'logo': user.logo,
+            'created_date': user.created_date,
+            'token': request.data['key']
+        }
+
+        }
+        return Response(response, status=status.HTTP_200_OK)
+        # except Token.DoesNotExist:
+        #     return Response('User not found', status=status.HTTP_404_NOT_FOUND)
+        
