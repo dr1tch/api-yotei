@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     # locals
     'wilayas.apps.WilayasConfig',
     'users.apps.UsersConfig',
+    'categories.apps.CategoriesConfig',
 ]
 
 AUTH_USER_MODEL = 'users.User'
