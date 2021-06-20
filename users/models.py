@@ -7,7 +7,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from .managers import CustomUserManager
 from wilayas.models import Wilaya
-
+from django.urls import reverse
 
 class User(AbstractBaseUser, PermissionsMixin):
     class Roles(models.IntegerChoices):
@@ -24,7 +24,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         Wilaya, on_delete=models.CASCADE, related_name='wilaya_user', null=True)
     phone_number = models.CharField(max_length=11)
     logo = models.ImageField(blank=True)
-    date_of_birth = models.DateField(default=datetime.date(1995, 12, 21))
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
@@ -46,12 +45,38 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+    
+    def get_absolute_url(self):
+        return reverse("users:detail", kwargs={"username": self.username})
+
+
+class ServiceProviderManage(models.Manager):
+    def get_queryset(self, *args, **kwargs):
+        return super().get_queryset(*args, **kwargs).filter(type=User.Roles.SERVICE_PROVIDER)
 
 
 class ServiceProvider(models.Model):
+    objects = ServiceProviderManage()
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     is_validated = models.BooleanField(default=0)
+    # def save(self, commit=True):
+    #     user = self(User, self).save(commit=False)
+    #     #user.is_validated = self.cleaned_data['date_of_birth']
+
+    
+
+class ClientManage(models.Manager):
+    def get_queryset(self, *args, **kwargs):
+        return super().get_queryset(*args, **kwargs).filter(type=User.Roles.CLIENT)
+
+    
 
 
 class Client(models.Model):
+    objects = ClientManage()
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    date_of_birth = models.DateField(null=True)
+    # def save(self, commit=True):
+    #     user = self(User, self).save(commit=False)
+    #     user.date_of_birth = self.cleaned_data['date_of_birth']
+   
