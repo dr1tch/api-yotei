@@ -39,17 +39,17 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # 3rd party
-    'rest_framework', # new
-    'rest_framework.authtoken', # new
-    'rest_auth', # new
-    'django.contrib.sites', # new
-    'allauth', # new
-    'allauth.account', # new
-    'allauth.socialaccount', # new
-    'rest_auth.registration', # new
-    'corsheaders', # new
-    'taggit', #new
-    'taggit_serializer', #new
+    'rest_framework',  # new
+    'rest_framework.authtoken',  # new
+    'rest_auth',  # new
+    'django.contrib.sites',  # new
+    'allauth',  # new
+    'allauth.account',  # new
+    'allauth.socialaccount',  # new
+    'rest_auth.registration',  # new
+    'corsheaders',  # new
+    'taggit',  # new
+    'taggit_serializer',  # new
 
     # locals
     'wilayas.apps.WilayasConfig',
@@ -60,25 +60,25 @@ INSTALLED_APPS = [
 
 AUTH_USER_MODEL = 'users.User'
 
-REST_FRAMEWORK = {    
+REST_FRAMEWORK = {
     'DATETIME_FORMAT': "%m/%d/%Y %I:%M%P",
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
-        'allauth.account.auth_backends.AuthenticationBackend',
+        # 'allauth.account.auth_backends.AuthenticationBackend',
     ]
 }
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'yoteiAPI.urls'
@@ -106,8 +106,8 @@ WSGI_APPLICATION = 'yoteiAPI.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-     'default': {
-        'ENGINE': 'django.db.backends.mysql', 
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'yotei-api',
         'USER': 'root',
         'PASSWORD': '0D2D6A07d9140',
@@ -166,24 +166,26 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Specifies localhost port 3000 where the React
 # server will be running is safe to receive requests
 # from. All all of this.
-CORS_ALLOWED_ORIGINS = [    
-    'http://localhost:3000'
-]
+# CORS_ALLOWED_ORIGINS = [
+#     'http://127.0.0.1:3000'
+# ]
+CORS_ORIGIN_ALLOW_ALL = True
+
 # Add the corsheaders middleware to the top of the
 # middleware list. The middleware list will already
 # exists and have other items in it.
 # Django All Auth config. Add all of this.
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-AUTHENTICATION_BACKENDS = (    
-    "django.contrib.auth.backends.ModelBackend",    
+AUTHENTICATION_BACKENDS = (
+    "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
 )
-SITE_ID = 1 
+SITE_ID = 1
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_SESSION_REMEMBER = True
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_UNIQUE_EMAIL = True # Rest Framework config. Add all of this.
+ACCOUNT_UNIQUE_EMAIL = True  # Rest Framework config. Add all of this.
 
 
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
