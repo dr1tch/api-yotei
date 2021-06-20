@@ -6,14 +6,5 @@ from .models import User
 from rest_framework.authtoken.admin import TokenAdmin
 
 TokenAdmin.raw_id_fields = ['user']
-class UserAdminConfig(UserAdmin):
-    model = User
-    search_fields = ('email', 'username', 'name',)
-    # list_filter = ('id', 'logo', 'email', 'username', 'name',
-    #                'phone_number', 'is_active', 'is_staff', 'type')
-    ordering = ('-created_date',)
-    list_display = ('id', 'email', 'username', 'name', 
-                    'phone_number', 'is_active', 'is_staff', 'wilaya','role')
 
-
-admin.site.register(User, UserAdminConfig)
+admin.site.register(User)
