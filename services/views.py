@@ -2,6 +2,8 @@ from rest_framework import generics
 from .models import Service
 from .serializers import ServiceSerializer
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticatedOrReadOnly, BasePermission, IsAdminUser, DjangoModelPermissions, IsAuthenticated
+from rest_framework.parsers import MultiPartParser, FormParser
+
 
 class ServiceWritePermission(BasePermission):
     message = 'Editing Service is restricted to the Service Provider only'
@@ -29,12 +31,14 @@ class IsServiceProvider(BasePermission):
 
 
 class ServiceList(generics.ListCreateAPIView):
+    parser_classes = (MultiPartParser, FormParser)
     permission_classes = [IsAuthenticated, ServiceWritePermission, IsServiceProvider]
     queryset = Service.objects.all()
     serializer_class = ServiceSerializer
 
 
 class ServiceDetail(generics.RetrieveUpdateDestroyAPIView):
+    parser_classes = (MultiPartParser, FormParser)
     permission_classes = [IsAuthenticated, ServiceWritePermission, ]
     queryset = Service.objects.all()
     serializer_class = ServiceSerializer

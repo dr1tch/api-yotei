@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -56,12 +56,15 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'categories.apps.CategoriesConfig',
     'services.apps.ServicesConfig',
+    'blacklists.apps.BlacklistsConfig',
+    'appointments.apps.AppointmentsConfig',
+    'feedbacks.apps.FeedbacksConfig',
 ]
 
 AUTH_USER_MODEL = 'users.User'
 
 REST_FRAMEWORK = {
-    'DATETIME_FORMAT': "%m/%d/%Y %I:%M%P",
+    'DATETIME_FORMAT': "%m/%d/%Y %H:%M:%S",
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.BasicAuthentication',
@@ -189,3 +192,5 @@ ACCOUNT_UNIQUE_EMAIL = True  # Rest Framework config. Add all of this.
 
 
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'

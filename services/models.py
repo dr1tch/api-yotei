@@ -22,7 +22,7 @@ class Service(models.Model):
     wilaya = models.ForeignKey(
         Wilaya, on_delete=models.CASCADE, related_name='wilaya_service')
     phone_number = models.CharField(max_length=11)
-    logo = models.ImageField(blank=True)
+    logo = models.ImageField(blank=True, upload_to='service_images')
     tags = TaggableManager(blank=True)
     deleted = models.BooleanField(default=False)
     visibility = models.BooleanField(default=True)

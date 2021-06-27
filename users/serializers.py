@@ -2,15 +2,40 @@ from rest_framework.authtoken.models import Token
 from rest_framework import serializers
 from django.contrib.auth import get_user_model, password_validation
 from django.contrib.auth.models import BaseUserManager
+from services.models import Service
+# from services.serializers import ServiceSerializer
+from appointments.serializers import AppointmentSerializer
+from appointments.models import Appointment
+from feedbacks.models import Feedback
+from categories.models import Category
+from wilayas.models import Wilaya
+
+from feedbacks.serializers import FeedbackSerializer
+from categories.serializers import CategorySerializer
+from wilayas.serializers import WilayaSerializer
 
 from .models import User
-
+from taggit_serializer.serializers import (TagListSerializerField,
+                                           TaggitSerializer)
 
 
 class UserSerializer(serializers.ModelSerializer):
+    services = serializers.SerializerMethodField('getServices')
+    feedbacks = serializers.SerializerMethodField('getFeedbacks')
+    wilaya = serializers.SerializerMethodField('getWilaya')
+
+    def getServices(self, obj):
+        return ServiceSerializer(Service.objects.filter(owner=obj.id), many=True).data
+
+    def getFeedbacks(self, obj):
+        return FeedbackSerializer(Feedback.objects.filter(client=obj.id), many=True).data
+
+    def getWilaya(self, obj):
+        return WilayaSerializer(Wilaya.objects.filter(wilaya_user=obj.id), many=True).data
 
     class Meta:
         model = User
+        # fields = '__all__'
         fields = (
             'id',
             'email',
@@ -20,11 +45,61 @@ class UserSerializer(serializers.ModelSerializer):
             'role',
             'wilaya',
             'address',
+            'services',
+            'feedbacks',
             'phone_number',
             'logo',
             'created_date',
         )
-        depth = 1
+
+
+class ServiceSerializer(TaggitSerializer, serializers.ModelSerializer):
+    tags = TagListSerializerField()
+    clientBlacklisted = serializers.SerializerMethodField('getBlacklisted')
+    appointments = serializers.SerializerMethodField('getAppointments')
+    feedbacks = serializers.SerializerMethodField('getFeedbacks')
+    category = serializers.SerializerMethodField('getCategory')
+    wilaya = serializers.SerializerMethodField('getWilaya')
+
+    def getBlacklisted(self, obj):
+        return UserSerializer(User.objects.filter(client_blacklist__service=obj.id), many=True).data
+
+    def getAppointments(self, obj):
+        return AppointmentSerializer(Appointment.objects.filter(service=obj.id), many=True).data
+
+    def getCategory(self, obj):
+        return CategorySerializer(Category.objects.filter(category_services=obj.id), many=True).data
+
+    def getWilaya(self, obj):
+        return WilayaSerializer(Wilaya.objects.filter(wilaya_service=obj.id), many=True).data
+
+    def getFeedbacks(self, obj):
+        return FeedbackSerializer(Feedback.objects.filter(service=obj.id), many=True).data
+
+    class Meta:
+        model = Service
+        fields = (
+            'id',
+            'owner',
+            'name',
+            'description',
+            'category',
+            'is_validated',
+            'tags',
+            'wilaya',
+            'visibility',
+            'longtitude',
+            'latitude',
+            'address',
+            'logo',
+            'created_date',
+            'phone_number',
+            'clientBlacklisted',
+            'appointments',
+            'feedbacks',
+        )
+        read_only_fields = ('is_validated', 'id',)
+
 
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
@@ -57,6 +132,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         auth_user = User.objects.create_user(**validated_data)
         return auth_user
 
+
 class PasswordChangeSerializer(serializers.Serializer):
     current_password = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True)
@@ -77,3 +153,9 @@ class PasswordChangeSerializer(serializers.Serializer):
 #         user_id = Token.objects.get(key=data).user_id
 #         user = User.objects.get(id=user_id)
 #         return user
+
+
+class FeedbackSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Feedback
+        fields = '__all__'
