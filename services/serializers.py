@@ -4,7 +4,15 @@ from .models import Service
 from users.models import User
 from appointments.models import Appointment
 from users.serializers import UserSerializer
-from appointments.serializers import AppointmentSerializer
+# from appointments.serializers import AppointmentSerializer
+from feedbacks.models import Feedback
+from feedbacks.serializers import FeedbackSerializer
+from categories.models import Category
+from categories.serializers import CategorySerializer
+from blacklists.serializers import BlacklistSerializer
+from blacklists.models import Blacklist
+
+
 from taggit_serializer.serializers import (TagListSerializerField,
                                            TaggitSerializer)
 
@@ -12,13 +20,21 @@ from taggit_serializer.serializers import (TagListSerializerField,
 class ServiceSerializer(TaggitSerializer, serializers.ModelSerializer):
     tags = TagListSerializerField()
     clientBlacklisted = serializers.SerializerMethodField('getBlacklisted')
-    serviceAppointments = serializers.SerializerMethodField('getAppointments')
+    appointments = serializers.SerializerMethodField('getAppointments')
+    feedbacks = serializers.SerializerMethodField('getFeedbacks')
+    service_category = serializers.SerializerMethodField('getCategory')
 
     def getBlacklisted(self, obj):
         return UserSerializer(User.objects.filter(client_blacklist__service=obj.id), many=True).data
 
     def getAppointments(self, obj):
         return AppointmentSerializer(Appointment.objects.filter(service=obj.id), many=True).data
+
+    def getFeedbacks(self, obj):
+        return FeedbackSerializer(Feedback.objects.filter(service=obj.id), many=True).data
+
+    def getCategory(self, obj):
+        return CategorySerializer(Category.objects.filter(category_services=obj.id), many=True).data
 
     class Meta:
         model = Service
@@ -38,6 +54,30 @@ class ServiceSerializer(TaggitSerializer, serializers.ModelSerializer):
             'logo',
             'phone_number',
             'clientBlacklisted',
-            'serviceAppointments',
+            'appointments',
+            'feedbacks',
+            'service_category'
         )
         read_only_fields = ('is_validated', 'id',)
+
+
+class AppointmentSerializer(serializers.ModelSerializer):
+    client = serializers.SerializerMethodField('getUser')
+
+    def getUser(self, obj):
+        return UserSerializer(User.objects.filter(client_appointment=obj.id).first()).data
+
+    class Meta:
+        model = Appointment
+
+        fields = (
+            'id',
+            'client',
+            'service',
+            'day',
+            'start',
+            'end',
+            'status',
+            'created_date'
+        )
+# TODO: return list of services where the current user is not blacklisted

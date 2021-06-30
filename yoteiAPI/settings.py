@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'corsheaders',  # new
     'taggit',  # new
     'taggit_serializer',  # new
+    'django_filters',   # new
 
     # locals
     'wilayas.apps.WilayasConfig',
@@ -64,13 +65,15 @@ INSTALLED_APPS = [
 AUTH_USER_MODEL = 'users.User'
 
 REST_FRAMEWORK = {
-    'DATETIME_FORMAT': "%m/%d/%Y %H:%M:%S",
+    'DATETIME_FORMAT': "%m-%d-%Y %H:%M:%S",
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         # 'allauth.account.auth_backends.AuthenticationBackend',
-    ]
+    ],
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+
 }
 
 MIDDLEWARE = [

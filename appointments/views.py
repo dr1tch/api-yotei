@@ -4,6 +4,7 @@ from .serializers import AppointmentSerializer
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticatedOrReadOnly, BasePermission, IsAdminUser, DjangoModelPermissions, IsAuthenticated
 
 # Create your views here.
+# TODO: Define permision: blacklisted user can't take oppointments
 
 
 class AppointmentList(generics.ListCreateAPIView):

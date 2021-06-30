@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model, password_validation
 from django.contrib.auth.models import BaseUserManager
 from services.models import Service
 # from services.serializers import ServiceSerializer
-from appointments.serializers import AppointmentSerializer
+# from appointments.serializers import AppointmentSerializer
 from appointments.models import Appointment
 from feedbacks.models import Feedback
 from categories.models import Category
@@ -159,3 +159,24 @@ class FeedbackSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feedback
         fields = '__all__'
+
+
+class AppointmentSerializer(serializers.ModelSerializer):
+    client = serializers.SerializerMethodField('getUser')
+
+    def getUser(self, obj):
+        return UserSerializer(User.objects.filter(client_appointment=obj.id).first()).data
+
+    class Meta:
+        model = Appointment
+
+        fields = (
+            'id',
+            'client',
+            'service',
+            'day',
+            'start',
+            'end',
+            'status',
+            'created_date'
+        )

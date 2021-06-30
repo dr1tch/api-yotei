@@ -5,7 +5,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth import logout
-from rest_framework import generics
+from rest_framework import generics, filters
 from .models import User
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
@@ -14,6 +14,7 @@ from django.http import JsonResponse
 from django.forms.models import model_to_dict
 from django.shortcuts import get_object_or_404
 import json
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 from .serializers import (
@@ -67,21 +68,13 @@ class PasswordChangeView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class UserListView(APIView):
-    serializer_class = UserSerializer
+class UserListView(generics.ListAPIView):
     permission_classes = (IsAuthenticated,)
-
-    def get(self, request):
-        queryset = User.objects.filter(is_superuser=False)
-        serializer = self.serializer_class(queryset, many=True)
-        response = {
-            'success': True,
-            'status_code': status.HTTP_200_OK,
-            'message': 'Successfully fetched users',
-            'users': serializer.data
-
-        }
-        return Response(response, status=status.HTTP_200_OK)
+    filter_backends = (filters.SearchFilter, DjangoFilterBackend)
+    search_fields = ['name', 'username', 'email', 'phone_number']
+    filterset_fields = ['wilaya__id']
+    queryset = User.objects.filter(is_superuser=False)
+    serializer_class = UserSerializer
 
 
 class UserDetailView(generics.RetrieveUpdateDestroyAPIView):

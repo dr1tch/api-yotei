@@ -25,7 +25,9 @@ urlpatterns = [
     path('api/services/', include('services.urls')),
     path('api/categories', include('categories.urls')),
     path('api/wilayas', include('wilayas.urls')),
-    path('api/appointments/', include('appointments.urls'))
-    # path('api/blacklists', include('blacklists.urls'))
+    path('api/appointments/', include('appointments.urls')),
+    path('api/blacklists/', include('blacklists.urls')),
+    path('api/feedbacks/', include('feedbacks.urls'))
+
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

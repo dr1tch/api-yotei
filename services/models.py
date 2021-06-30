@@ -33,6 +33,7 @@ class Service(models.Model):
     class Meta:
         verbose_name = 'service'
         verbose_name_plural = 'services'
+        # ordering = ('-created_date',)
 
     def __str__(self):
         return self.name

@@ -35,6 +35,7 @@ class Feedback(models.Model):
     class Meta:
         verbose_name = 'feedback'
         verbose_name_plural = 'feedbacks'
+        ordering = ('-created_date',)
 
     def __str__(self):
         return self.body
