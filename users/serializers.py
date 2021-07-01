@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model, password_validation
 from django.contrib.auth.models import BaseUserManager
 from services.models import Service
 # from services.serializers import ServiceSerializer
-# from appointments.serializers import AppointmentSerializer
+from appointments.serializers import AppointmentSerializer
 from appointments.models import Appointment
 from feedbacks.models import Feedback
 from categories.models import Category
@@ -23,6 +23,10 @@ class UserSerializer(serializers.ModelSerializer):
     services = serializers.SerializerMethodField('getServices')
     feedbacks = serializers.SerializerMethodField('getFeedbacks')
     wilaya = serializers.SerializerMethodField('getWilaya')
+    client_appointments = serializers.SerializerMethodField('getAppointments')
+
+    def getAppointments(self, obj):
+        return AppointmentSerializer(Appointment.objects.filter(client=obj.id), many=True).data
 
     def getServices(self, obj):
         return ServiceSerializer(Service.objects.filter(owner=obj.id), many=True).data
@@ -47,6 +51,7 @@ class UserSerializer(serializers.ModelSerializer):
             'address',
             'services',
             'feedbacks',
+            'client_appointments',
             'phone_number',
             'logo',
             'created_date',
@@ -162,21 +167,12 @@ class FeedbackSerializer(serializers.ModelSerializer):
 
 
 class AppointmentSerializer(serializers.ModelSerializer):
-    client = serializers.SerializerMethodField('getUser')
+    # client = serializers.SerializerMethodField('getUser')
 
-    def getUser(self, obj):
-        return UserSerializer(User.objects.filter(client_appointment=obj.id).first()).data
+    # def getUser(self, obj):
+    #     return UserSerializer(User.objects.filter(client_appointment=obj.id).first()).data
 
     class Meta:
         model = Appointment
 
-        fields = (
-            'id',
-            'client',
-            'service',
-            'day',
-            'start',
-            'end',
-            'status',
-            'created_date'
-        )
+        fields = '__all__'

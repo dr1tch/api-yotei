@@ -11,7 +11,8 @@ from categories.models import Category
 from categories.serializers import CategorySerializer
 from blacklists.serializers import BlacklistSerializer
 from blacklists.models import Blacklist
-
+from wilayas.serializers import WilayaSerializer
+from wilayas.models import Wilaya
 
 from taggit_serializer.serializers import (TagListSerializerField,
                                            TaggitSerializer)
@@ -23,12 +24,16 @@ class ServiceSerializer(TaggitSerializer, serializers.ModelSerializer):
     appointments = serializers.SerializerMethodField('getAppointments')
     feedbacks = serializers.SerializerMethodField('getFeedbacks')
     service_category = serializers.SerializerMethodField('getCategory')
+    service_wilaya = serializers.SerializerMethodField('getWilaya')
 
     def getBlacklisted(self, obj):
         return UserSerializer(User.objects.filter(client_blacklist__service=obj.id), many=True).data
 
     def getAppointments(self, obj):
         return AppointmentSerializer(Appointment.objects.filter(service=obj.id), many=True).data
+
+    def getWilaya(self, obj):
+        return WilayaSerializer(Wilaya.objects.filter(wilaya_service=obj.id)).data
 
     def getFeedbacks(self, obj):
         return FeedbackSerializer(Feedback.objects.filter(service=obj.id), many=True).data
@@ -56,7 +61,8 @@ class ServiceSerializer(TaggitSerializer, serializers.ModelSerializer):
             'clientBlacklisted',
             'appointments',
             'feedbacks',
-            'service_category'
+            'service_category',
+            'service_wilaya'
         )
         read_only_fields = ('is_validated', 'id',)
 
