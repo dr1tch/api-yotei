@@ -62,7 +62,8 @@ class ServiceSerializer(TaggitSerializer, serializers.ModelSerializer):
             'appointments',
             'feedbacks',
             'service_category',
-            'service_wilaya'
+            'service_wilaya',
+            'created_date'
         )
         read_only_fields = ('is_validated', 'id',)
 
