@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'blacklists.apps.BlacklistsConfig',
     'appointments.apps.AppointmentsConfig',
     'feedbacks.apps.FeedbacksConfig',
+    'notifications.apps.NotificationsConfig',
 ]
 
 AUTH_USER_MODEL = 'users.User'
