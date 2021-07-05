@@ -72,7 +72,7 @@ class UserListView(generics.ListAPIView):
     permission_classes = (IsAuthenticated,)
     filter_backends = (filters.SearchFilter, DjangoFilterBackend)
     search_fields = ['name', 'username', 'email', 'phone_number', 'role']
-    filterset_fields = ['wilaya__id']
+    filterset_fields = ['wilaya__id', 'role']
     queryset = User.objects.filter(is_superuser=False)
     serializer_class = UserSerializer
 

@@ -9,10 +9,13 @@ from appointments.models import Appointment
 from feedbacks.models import Feedback
 from categories.models import Category
 from wilayas.models import Wilaya
+from notifications.models import Notification
 
 from feedbacks.serializers import FeedbackSerializer
 from categories.serializers import CategorySerializer
 from wilayas.serializers import WilayaSerializer
+from notifications.serializers import NotificationSerializer
+
 
 from .models import User
 from taggit_serializer.serializers import (TagListSerializerField,
@@ -24,6 +27,7 @@ class UserSerializer(serializers.ModelSerializer):
     feedbacks = serializers.SerializerMethodField('getFeedbacks')
     wilaya = serializers.SerializerMethodField('getWilaya')
     client_appointments = serializers.SerializerMethodField('getAppointments')
+    notifications = serializers.SerializerMethodField('getNotifications')
 
     def getAppointments(self, obj):
         return AppointmentSerializer(Appointment.objects.filter(client=obj.id), many=True).data
@@ -36,6 +40,9 @@ class UserSerializer(serializers.ModelSerializer):
 
     def getWilaya(self, obj):
         return WilayaSerializer(Wilaya.objects.filter(wilaya_user=obj.id), many=True).data
+
+    def getNotifications(self, obj):
+        return NotificationSerializer(Notification.objects.filter(user=obj.id), many=True).data
 
     class Meta:
         model = User
@@ -54,6 +61,7 @@ class UserSerializer(serializers.ModelSerializer):
             'client_appointments',
             'phone_number',
             'logo',
+            'notifications',
             'created_date',
         )
 
