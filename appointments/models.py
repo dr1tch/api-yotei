@@ -13,7 +13,13 @@ class Appointment(models.Model):
         APPROUVED = 2
         PENDING = 1
         REJECTED = 0
+
+    class Confirmation(models.IntegerChoices):
+        CONFIRMED = 2
+        PENDING = 1
+        CANCELED = 0
     base_status = Status.PENDING
+    base_confirmation = Confirmation.PENDING
     service = models.ForeignKey(
         Service, on_delete=models.CASCADE, related_name='service_appointment')
     client = models.ForeignKey(
@@ -21,6 +27,9 @@ class Appointment(models.Model):
     day = models.DateField(blank=False)
     start = models.TimeField(blank=False)
     end = models.TimeField(blank=False)
+    confirmed = models.IntegerField(
+        _("Confirmation"), choices=Confirmation.choices, default=base_confirmation
+    )
     status = models.IntegerField(
         _("Status"), choices=Status.choices, default=base_status
     )

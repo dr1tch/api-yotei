@@ -28,7 +28,7 @@ urlpatterns = [
     path('api/appointments/', include('appointments.urls')),
     path('api/blacklists/', include('blacklists.urls')),
     path('api/feedbacks/', include('feedbacks.urls')),
-    path('api/notificatons/', include('notifications.urls'))
+    path('api/notifications/', include('notifications.urls'))
 
 
 ]
