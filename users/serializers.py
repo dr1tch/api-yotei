@@ -104,6 +104,7 @@ class ServiceSerializer(TaggitSerializer, serializers.ModelSerializer):
             'longtitude',
             'latitude',
             'address',
+            'agents',
             'logo',
             'created_date',
             'phone_number',

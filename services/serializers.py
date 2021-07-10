@@ -1,5 +1,8 @@
 from re import search
+from django.contrib.contenttypes import fields
+from django.db.models.base import Model
 from rest_framework import serializers
+from taggit.models import Tag
 from .models import Service
 from users.models import User
 from appointments.models import Appointment
@@ -52,6 +55,7 @@ class ServiceSerializer(TaggitSerializer, serializers.ModelSerializer):
             'is_validated',
             'tags',
             'wilaya',
+            'agents',
             'visibility',
             'address',
             'longtitude',
@@ -88,3 +92,9 @@ class AppointmentSerializer(serializers.ModelSerializer):
             'created_date'
         )
 # TODO: return list of services where the current user is not blacklisted
+
+
+class TagsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = '__all__'

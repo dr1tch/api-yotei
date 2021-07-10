@@ -2,7 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.serializers import Serializer
 from rest_framework.views import APIView
 from rest_framework.decorators import action
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth import logout
 from rest_framework import generics, filters
@@ -69,7 +69,7 @@ class PasswordChangeView(APIView):
 
 
 class UserListView(generics.ListAPIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     filter_backends = (filters.SearchFilter, DjangoFilterBackend)
     search_fields = ['name', 'username', 'email', 'phone_number', 'role']
     filterset_fields = ['wilaya__id', 'role']
