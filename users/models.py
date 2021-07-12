@@ -23,7 +23,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     address = models.TextField(_("adresse"), blank=True)
     wilaya = models.ForeignKey(
         Wilaya, on_delete=models.CASCADE, related_name='wilaya_user', null=True)
-    phone_number = models.CharField(max_length=11)
+    phone_number = models.CharField(max_length=13)
     logo = models.ImageField(blank=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)

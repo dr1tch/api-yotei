@@ -5,12 +5,12 @@ from rest_framework.permissions import SAFE_METHODS, IsAuthenticatedOrReadOnly, 
 from django_filters.rest_framework import DjangoFilterBackend
 
 # Create your views here.
-# TODO: Define permision: blacklisted user can't take oppointments
+# TODO: Define permission: blacklisted user can't take oppointments
 
 
 class AppointmentList(generics.ListCreateAPIView):
     filter_backends = (filters.SearchFilter, DjangoFilterBackend)
-    filterset_fields = ['service__id', 'client__id']
+    filterset_fields = ['service__id', 'client__id', 'status', 'confirmed']
 
     serializer_class = AppointmentSerializer
     queryset = Appointment.objects.all()
