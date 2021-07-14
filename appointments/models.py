@@ -42,4 +42,4 @@ class Appointment(models.Model):
         verbose_name_plural = 'appointments'
 
     def __str__(self):
-        return "{} got appointment with {} ".format(self.client.name, self.service.name)
+        return str("{} got appointment with {} ".format(self.client.name, self.service.name))

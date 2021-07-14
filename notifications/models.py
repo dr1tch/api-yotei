@@ -21,4 +21,4 @@ class Notification(models.Model):
         ordering = ('-created_date',)
 
     def __str__(self):
-        return [self.body, self.user]
+        return [str(self.body), str(self.user)]

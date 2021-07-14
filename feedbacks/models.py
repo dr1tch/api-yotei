@@ -38,4 +38,4 @@ class Feedback(models.Model):
         ordering = ('-created_date',)
 
     def __str__(self):
-        return self.body
+        return str(self.body)

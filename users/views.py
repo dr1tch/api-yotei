@@ -15,6 +15,7 @@ from django.forms.models import model_to_dict
 from django.shortcuts import get_object_or_404
 import json
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.parsers import MultiPartParser, FormParser
 
 
 from .serializers import (
@@ -69,15 +70,17 @@ class PasswordChangeView(APIView):
 
 
 class UserListView(generics.ListAPIView):
+    parser_classes = (MultiPartParser, FormParser)
     permission_classes = (IsAuthenticatedOrReadOnly,)
     filter_backends = (filters.SearchFilter, DjangoFilterBackend)
-    search_fields = ['name', 'username', 'email', 'phone_number', 'role']
+    search_fields = ['name', 'username', 'email', 'phone_number']
     filterset_fields = ['wilaya__id', 'role']
     queryset = User.objects.filter(is_superuser=False)
     serializer_class = UserSerializer
 
 
 class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
+    parser_classes = (MultiPartParser, FormParser)
     queryset = User.objects.filter(is_superuser=False)
     serializer_class = UserSerializer
 

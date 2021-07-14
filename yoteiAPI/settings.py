@@ -115,7 +115,7 @@ SMS_BACKEND = 'sms.backends.twilio.SmsBackend'
 # TWILIO_ACCOUNT_SID = 'live_redacted-twilio-account-sid'
 # TWILIO_AUTH_TOKEN = 'live_redacted-twilio-auth-token'
 TWILIO_ACCOUNT_SID = "AC993210ace93234c99627420b9041b285"
-TWILIO_AUTH_TOKEN = "b74787a7dde88c166e5a9254c5dbbec5"
+TWILIO_AUTH_TOKEN = "c7e4fc7e27c7b3661fe77094838ffb12"
 TWILIO_PHONE_NUMBER = "+12035993986"
 
 # Database

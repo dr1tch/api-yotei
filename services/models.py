@@ -37,7 +37,4 @@ class Service(models.Model):
         # ordering = ('-created_date',)
 
     def __str__(self):
-        return self.name
-
-    def get_user(id):
-        return User.objects.get(id=id)
+        return str(self.name)

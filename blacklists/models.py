@@ -19,4 +19,4 @@ class Blacklist(models.Model):
         verbose_name_plural = 'blacklists'
 
     def __str__(self):
-        return self.service.name
+        return str(self.service.name)

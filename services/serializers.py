@@ -89,6 +89,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
             'start',
             'end',
             'status',
+            'confirmed',
             'created_date'
         )
 # TODO: return list of services where the current user is not blacklisted

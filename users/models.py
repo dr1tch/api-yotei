@@ -45,29 +45,30 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = 'users'
 
     def __str__(self):
-        return self.email
+        print(self.email)
+        return str(self.email)
 
-    def get_absolute_url(self):
-        return reverse("users:detail", kwargs={"username": self.username})
-
-
-class ServiceProviderManage(models.Manager):
-    def get_queryset(self, *args, **kwargs):
-        return super().get_queryset(*args, **kwargs).filter(user.role == User.Roles.SERVICE_PROVIDER)
+#     def get_absolute_url(self):
+#         return reverse("users:detail", kwargs={"username": self.username})
 
 
-class ServiceProvider(models.Model):
-    objects = ServiceProviderManage()
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    is_validated = models.BooleanField(default=0)
+# class ServiceProviderManage(models.Manager):
+#     def get_queryset(self, *args, **kwargs):
+#         return super().get_queryset(*args, **kwargs).filter(user.role == User.Roles.SERVICE_PROVIDER)
 
 
-class ClientManage(models.Manager):
-    def get_queryset(self, *args, **kwargs):
-        return super().get_queryset(*args, **kwargs).filter(user.role == User.Roles.CLIENT)
+# class ServiceProvider(models.Model):
+#     objects = ServiceProviderManage()
+#     user = models.OneToOneField(User, on_delete=models.CASCADE)
+#     is_validated = models.BooleanField(default=0)
 
 
-class Client(models.Model):
-    objects = ClientManage()
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    date_of_birth = models.DateField(null=True)
+# class ClientManage(models.Manager):
+#     def get_queryset(self, *args, **kwargs):
+#         return super().get_queryset(*args, **kwargs).filter(user.role == User.Roles.CLIENT)
+
+
+# class Client(models.Model):
+#     objects = ClientManage()
+#     user = models.OneToOneField(User, on_delete=models.CASCADE)
+#     date_of_birth = models.DateField(null=True)
