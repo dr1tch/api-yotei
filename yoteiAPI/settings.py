@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-t^(q9z7z!v=@_vuur0#g7#bpe3^7y^zt(34r$2a098k&kac!a4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -126,7 +126,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'yotei-api',
         'USER': 'root',
-        'PASSWORD': '0D2D6A07d9140',
+        'PASSWORD': '',
         'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
         'PORT': '3306',
     }
